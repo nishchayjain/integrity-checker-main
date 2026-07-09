@@ -281,9 +281,13 @@
     </div>
 
     <script>
+      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3847'
+        : 'https://integrity-shield-backend.onrender.com'; // Replace with Render URL
+
       async function loadDashboard() {
         try {
-          const res = await fetch("/api/dashboard");
+          const res = await fetch(API_BASE_URL + "/api/dashboard");
           const data = await res.json();
           renderDashboard(data);
         } catch (err) {

@@ -2,12 +2,14 @@
   "name": "integrity-trap-demo",
   "version": "1.0.0",
   "description": "Anti-Scrape Assessment Integrity Demo - Hackathon Project",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js"
   },
   "dependencies": {
-    "express": "^4.21.0"
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongoose": "^8.3.1"
   }
 }

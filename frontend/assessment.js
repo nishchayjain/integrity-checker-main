@@ -2,6 +2,10 @@
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
 
+  const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3847'
+    : 'https://integrity-shield-backend.onrender.com'; // Replace with Render URL
+
   // ============================================================
   // AI BROWSER LOCKOUT — runs before assessment loads
   // ============================================================
@@ -134,7 +138,7 @@
   }
 
   function reportLockout(lockoutType, browserName) {
-    fetch("/api/report-lockout", {
+    fetch(API_BASE_URL + "/api/report-lockout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -792,7 +796,7 @@
 
   async function startSession(info) {
     try {
-      const res = await fetch("/api/start-session", {
+      const res = await fetch(API_BASE_URL + "/api/start-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ candidateInfo: info }),
@@ -809,7 +813,7 @@
 
   async function submitAnswer(qId, option, responseTimeMs) {
     try {
-      const res = await fetch("/api/submit-answer", {
+      const res = await fetch(API_BASE_URL + "/api/submit-answer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -831,7 +835,7 @@
       if (window.IntegrityMonitor) {
         await window.IntegrityMonitor.flushSignals();
       }
-      const res = await fetch("/api/complete-session", {
+      const res = await fetch(API_BASE_URL + "/api/complete-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId }),

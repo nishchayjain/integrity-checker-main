@@ -11,6 +11,10 @@
   let _sessionId = null;
   const _signalQueue = [];
   let _flushTimer = null;
+
+  const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3847'
+    : 'https://integrity-shield-backend.onrender.com'; // Replace with Render URL
   let _mutationObserver = null;
   let _focusLostCount = 0;
   const _seenSignals = new Set(); // deduplicate identical signals
@@ -87,7 +91,7 @@
     if (!_sessionId || _signalQueue.length === 0) return;
     var batch = _signalQueue.splice(0, _signalQueue.length);
     try {
-      await fetch("/api/signal", {
+      await fetch(API_BASE_URL + "/api/signal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId: _sessionId, signals: batch }),
@@ -314,7 +318,7 @@
     }
 
     if (_sessionId) {
-      fetch("/api/signal", {
+      fetch(API_BASE_URL + "/api/signal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -345,7 +349,7 @@
     }
 
     if (_sessionId) {
-      fetch("/api/signal", {
+      fetch(API_BASE_URL + "/api/signal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -2041,7 +2045,7 @@
   function sendSnapshot(dataUrl, reason, ts) {
     try {
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/api/proctor-snapshot", true);
+      xhr.open("POST", API_BASE_URL + "/api/proctor-snapshot", true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.send(
         JSON.stringify({
