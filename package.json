@@ -1,0 +1,13 @@
+{
+  "name": "integrity-trap-demo",
+  "version": "1.0.0",
+  "description": "Anti-Scrape Assessment Integrity Demo - Hackathon Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
