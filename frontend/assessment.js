@@ -4,7 +4,7 @@
 
   const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3847'
-    : 'https://integrity-shield-backend.onrender.com'; // Replace with Render URL
+    : 'https://integrity-checker-main.onrender.com';
 
   // ============================================================
   // AI BROWSER LOCKOUT — runs before assessment loads
@@ -146,7 +146,7 @@
         lockoutType: lockoutType,
         detail: "UA: " + navigator.userAgent,
       }),
-    }).catch(() => {});
+    }).catch(() => { });
   }
 
   function runLockoutCheck() {
@@ -878,15 +878,15 @@
         <div class="flags-list full-width">
           <div class="result-label">Detection Signals</div>
           ${data.flags
-            .map(
-              (f) => `
+          .map(
+            (f) => `
             <div class="flag-item flag-${f.severity}">
               <span>${f.severity === "critical" ? "\u{1F6A8}" : f.severity === "low" ? "\u{2139}\u{FE0F}" : "\u{26A0}\u{FE0F}"}</span>
               <span>${f.message}</span>
             </div>
           `,
-            )
-            .join("")}
+          )
+          .join("")}
         </div>
       `;
     }

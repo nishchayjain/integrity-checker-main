@@ -1,611 +1,640 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Integrity Detection Dashboard</title>
-    <link rel="stylesheet" href="styles.css" />
-    <style>
-      body {
-        background: #0f172a;
-        color: #e2e8f0;
-      }
 
-      .dashboard {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integrity Detection Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background: #0f172a;
+      color: #e2e8f0;
+    }
 
-      .dashboard-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-      }
-      .dashboard-header h1 {
-        font-size: 1.5rem;
-        color: #f8fafc;
-      }
-      .refresh-btn {
-        padding: 0.5rem 1rem;
-        background: #1e293b;
-        color: #94a3b8;
-        border: 1px solid #334155;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.15s;
-      }
-      .refresh-btn:hover {
-        background: #334155;
-        color: #e2e8f0;
-      }
+    .dashboard {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
 
-      .stats-row {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-      .stat-card {
-        background: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 10px;
-        padding: 1.25rem;
-      }
-      .stat-label {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #64748b;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-      }
-      .stat-value {
-        font-size: 1.75rem;
-        font-weight: 700;
-      }
-      .stat-value.green {
-        color: #22c55e;
-      }
-      .stat-value.red {
-        color: #ef4444;
-      }
-      .stat-value.yellow {
-        color: #eab308;
-      }
-      .stat-value.blue {
-        color: #3b82f6;
-      }
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
 
-      .sessions-table {
-        background: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 10px;
-        overflow: hidden;
-      }
-      .table-header {
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid #334155;
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: #94a3b8;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      th {
-        text-align: left;
-        padding: 0.75rem 1.25rem;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #64748b;
-        font-weight: 600;
-        border-bottom: 1px solid #334155;
-      }
-      td {
-        padding: 0.875rem 1.25rem;
-        font-size: 0.875rem;
-        border-bottom: 1px solid #1e293b;
-        color: #cbd5e1;
-      }
-      tr:hover td {
-        background: #1a2332;
-      }
+    .dashboard-header h1 {
+      font-size: 1.5rem;
+      color: #f8fafc;
+    }
 
-      .badge {
-        display: inline-block;
-        padding: 0.25rem 0.625rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-      }
-      .badge-critical {
-        background: #450a0a;
-        color: #fca5a5;
-      }
-      .badge-warning {
-        background: #451a03;
-        color: #fcd34d;
-      }
-      .badge-clean {
-        background: #052e16;
-        color: #86efac;
-      }
+    .refresh-btn {
+      padding: 0.5rem 1rem;
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
 
-      .trap-tag {
-        display: inline-block;
-        padding: 0.125rem 0.5rem;
-        background: #312e81;
-        color: #a5b4fc;
-        border-radius: 4px;
-        font-size: 0.7rem;
-        font-weight: 500;
-        margin-right: 0.25rem;
-        margin-bottom: 0.25rem;
-      }
+    .refresh-btn:hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
 
-      .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: #64748b;
-      }
-      .empty-state p {
-        font-size: 0.875rem;
-        margin-top: 0.5rem;
-      }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
 
-      .session-detail {
-        display: none;
-        background: #0f172a;
-        padding: 1rem 1.25rem;
-      }
-      .session-detail.open {
-        display: table-row;
-      }
+    .stat-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
 
-      .detail-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 1rem;
-      }
-      .detail-item {
-        background: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 6px;
-        padding: 0.75rem;
-      }
-      .detail-item-label {
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        color: #64748b;
-        margin-bottom: 0.25rem;
-      }
-      .detail-item-value {
-        font-size: 0.875rem;
-        font-weight: 600;
-      }
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
 
-      .answers-list {
-        margin-top: 1rem;
-      }
-      .answer-row {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 0.5rem 0;
-        border-bottom: 1px solid #1e293b;
-        font-size: 0.8rem;
-      }
-      .answer-q {
-        font-weight: 600;
-        width: 40px;
-      }
-      .answer-choice {
-        width: 60px;
-      }
-      .answer-time {
-        width: 80px;
-        color: #64748b;
-      }
-      .answer-status {
-        flex: 1;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="dashboard">
-      <div class="dashboard-header">
-        <div>
-          <h1>Integrity Detection Dashboard</h1>
-          <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem">
-            Anti-Scrape Trap Monitoring
-          </p>
-        </div>
-        <div style="display: flex; gap: 0.75rem">
-          <a href="/" class="refresh-btn" style="text-decoration: none"
-            >Take Assessment</a
-          >
-          <button id="refresh-btn" class="refresh-btn">Refresh</button>
-        </div>
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .stat-value.green {
+      color: #22c55e;
+    }
+
+    .stat-value.red {
+      color: #ef4444;
+    }
+
+    .stat-value.yellow {
+      color: #eab308;
+    }
+
+    .stat-value.blue {
+      color: #3b82f6;
+    }
+
+    .sessions-table {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #334155;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #94a3b8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      font-weight: 600;
+      border-bottom: 1px solid #334155;
+    }
+
+    td {
+      padding: 0.875rem 1.25rem;
+      font-size: 0.875rem;
+      border-bottom: 1px solid #1e293b;
+      color: #cbd5e1;
+    }
+
+    tr:hover td {
+      background: #1a2332;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-critical {
+      background: #450a0a;
+      color: #fca5a5;
+    }
+
+    .badge-warning {
+      background: #451a03;
+      color: #fcd34d;
+    }
+
+    .badge-clean {
+      background: #052e16;
+      color: #86efac;
+    }
+
+    .trap-tag {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      background: #312e81;
+      color: #a5b4fc;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      margin-right: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #64748b;
+    }
+
+    .empty-state p {
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    .session-detail {
+      display: none;
+      background: #0f172a;
+      padding: 1rem 1.25rem;
+    }
+
+    .session-detail.open {
+      display: table-row;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .detail-item {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 0.75rem;
+    }
+
+    .detail-item-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 0.25rem;
+    }
+
+    .detail-item-value {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .answers-list {
+      margin-top: 1rem;
+    }
+
+    .answer-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #1e293b;
+      font-size: 0.8rem;
+    }
+
+    .answer-q {
+      font-weight: 600;
+      width: 40px;
+    }
+
+    .answer-choice {
+      width: 60px;
+    }
+
+    .answer-time {
+      width: 80px;
+      color: #64748b;
+    }
+
+    .answer-status {
+      flex: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard">
+    <div class="dashboard-header">
+      <div>
+        <h1>Integrity Detection Dashboard</h1>
+        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem">
+          Anti-Scrape Trap Monitoring
+        </p>
       </div>
-
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-label">Total Sessions</div>
-          <div id="stat-total" class="stat-value blue">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">AI Blocked / Warned</div>
-          <div id="stat-lockouts" class="stat-value red">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">AI Detected (Traps)</div>
-          <div id="stat-trapped" class="stat-value yellow">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Clean Sessions</div>
-          <div id="stat-clean" class="stat-value green">0</div>
-        </div>
-      </div>
-
-      <div class="sessions-table">
-        <div class="table-header">Session History</div>
-        <table>
-          <thead>
-            <tr>
-              <th>Session ID</th>
-              <th>Started</th>
-              <th>Duration</th>
-              <th>Score</th>
-              <th>Traps Hit</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="sessions-body">
-            <tr>
-              <td colspan="6" class="empty-state">
-                <p>
-                  No sessions yet. Open the assessment in Opera Neon or another
-                  AI browser to test.
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div style="display: flex; gap: 0.75rem">
+        <a href="/" class="refresh-btn" style="text-decoration: none">Take Assessment</a>
+        <button id="refresh-btn" class="refresh-btn">Refresh</button>
       </div>
     </div>
 
-    <script>
-      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:3847'
-        : 'https://integrity-shield-backend.onrender.com'; // Replace with Render URL
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Sessions</div>
+        <div id="stat-total" class="stat-value blue">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">AI Blocked / Warned</div>
+        <div id="stat-lockouts" class="stat-value red">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">AI Detected (Traps)</div>
+        <div id="stat-trapped" class="stat-value yellow">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Clean Sessions</div>
+        <div id="stat-clean" class="stat-value green">0</div>
+      </div>
+    </div>
 
-      async function loadDashboard() {
-        try {
-          const res = await fetch(API_BASE_URL + "/api/dashboard");
-          const data = await res.json();
-          renderDashboard(data);
-        } catch (err) {
-          console.error("Failed to load dashboard:", err);
-        }
+    <div class="sessions-table">
+      <div class="table-header">Session History</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Session ID</th>
+            <th>Started</th>
+            <th>Duration</th>
+            <th>Score</th>
+            <th>Traps Hit</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="sessions-body">
+          <tr>
+            <td colspan="6" class="empty-state">
+              <p>
+                No sessions yet. Open the assessment in Opera Neon or another
+                AI browser to test.
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3847'
+      : 'https://integrity-checker-main.onrender.com'; // Replace with Render URL
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch(API_BASE_URL + "/api/dashboard");
+        const data = await res.json();
+        renderDashboard(data);
+      } catch (err) {
+        console.error("Failed to load dashboard:", err);
+      }
+    }
+
+    function renderDashboard(data) {
+      const sessions = data.sessions || [];
+      const stats = data.stats || {};
+
+      const total = sessions.length;
+      const lockouts =
+        stats.lockouts ||
+        sessions.filter((s) => s.sessionType === "lockout").length;
+      const aiDetected = stats.aiDetected || 0;
+      const clean = stats.clean || 0;
+
+      document.getElementById("stat-total").textContent = total;
+      document.getElementById("stat-lockouts").textContent = lockouts;
+      document.getElementById("stat-trapped").textContent = aiDetected;
+      document.getElementById("stat-clean").textContent = clean;
+
+      const tbody = document.getElementById("sessions-body");
+
+      if (total === 0) {
+        tbody.innerHTML =
+          '<tr><td colspan="6" class="empty-state"><p>No sessions yet. Open the assessment in an AI browser (Opera, Arc, etc.) to test detection.</p></td></tr>';
+        return;
       }
 
-      function renderDashboard(data) {
-        const sessions = data.sessions || [];
-        const stats = data.stats || {};
-
-        const total = sessions.length;
-        const lockouts =
-          stats.lockouts ||
-          sessions.filter((s) => s.sessionType === "lockout").length;
-        const aiDetected = stats.aiDetected || 0;
-        const clean = stats.clean || 0;
-
-        document.getElementById("stat-total").textContent = total;
-        document.getElementById("stat-lockouts").textContent = lockouts;
-        document.getElementById("stat-trapped").textContent = aiDetected;
-        document.getElementById("stat-clean").textContent = clean;
-
-        const tbody = document.getElementById("sessions-body");
-
-        if (total === 0) {
-          tbody.innerHTML =
-            '<tr><td colspan="6" class="empty-state"><p>No sessions yet. Open the assessment in an AI browser (Opera, Arc, etc.) to test detection.</p></td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = sessions
-          .map(function (session) {
-            var startDate = new Date(session.startedAt);
-            var timeStr = startDate.toLocaleTimeString();
-            var isLockout = session.sessionType === "lockout";
-            var durationSec = isLockout
-              ? "Blocked"
-              : session.durationMs
-                ? Math.round(session.durationMs / 1000) + "s"
-                : "In progress";
-            var score =
-              session.integrityScore != null ? session.integrityScore : 0;
-            var scoreClass =
-              score >= 80 ? "green" : score >= 50 ? "yellow" : "red";
-            var verdict =
-              session.verdict || (isLockout ? "ai_blocked" : "clean");
-            var statusMap = {
-              clean: { cls: "clean", text: "Clean" },
-              inconclusive: { cls: "warning", text: "Inconclusive" },
-              suspicious: { cls: "warning", text: "Suspicious" },
-              ai_detected: { cls: "critical", text: "AI Detected" },
-              ai_blocked: { cls: "critical", text: "AI Blocked" },
-            };
-            var status = statusMap[verdict] || statusMap.clean;
-            var shortId = session.id
-              .replace("session_", "")
-              .replace("lockout_", "LK-")
-              .slice(0, 12);
-            var candidateName = session.candidateInfo
-              ? session.candidateInfo.firstName +
-                " " +
-                session.candidateInfo.lastName
-              : "";
-            var lockoutBrowser =
-              session.lockoutInfo && session.lockoutInfo.browserName
-                ? session.lockoutInfo.browserName
-                : "";
-
-            var trapTags = "";
-            if (isLockout && lockoutBrowser) {
-              trapTags =
-                '<span class="trap-tag" style="background:#450a0a;color:#fca5a5;">' +
-                lockoutBrowser +
-                "</span>";
-            } else if (
-              session.trapsTriggered &&
-              session.trapsTriggered.length > 0
-            ) {
-              trapTags = session.trapsTriggered
-                .map(function (t) {
-                  return (
-                    '<span class="trap-tag">' +
-                    t.trapType.replace(/_/g, " ") +
-                    "</span>"
-                  );
-                })
-                .join("");
-            } else {
-              trapTags = '<span style="color: #64748b;">None</span>';
-            }
-
-            var answersHtml = "";
-            if (session.answers && session.answers.length > 0) {
-              answersHtml = session.answers
-                .map(function (a) {
-                  var trapped = a.trapTriggered ? "🚨 TRAPPED" : "✓";
-                  var trappedClass = a.trapTriggered
-                    ? "color:#ef4444;font-weight:600;"
-                    : "color:#22c55e;";
-                  return (
-                    '<div class="answer-row">' +
-                    '<span class="answer-q">' +
-                    a.questionId.toUpperCase() +
-                    "</span>" +
-                    '<span class="answer-choice">Option ' +
-                    a.selectedOption +
-                    "</span>" +
-                    '<span class="answer-time">' +
-                    Math.round(a.responseTimeMs / 1000) +
-                    "s</span>" +
-                    '<span class="answer-status" style="' +
-                    trappedClass +
-                    '">' +
-                    trapped +
-                    (a.trapType
-                      ? " (" + a.trapType.replace(/_/g, " ") + ")"
-                      : "") +
-                    "</span>" +
-                    "</div>"
-                  );
-                })
-                .join("");
-            } else if (isLockout) {
-              answersHtml =
-                '<p style="color:#64748b;">Session was blocked before assessment started.</p>';
-            } else {
-              answersHtml = '<p style="color:#64748b;">No answers recorded</p>';
-            }
-
-            var signalsHtml = "";
-            var bsArr = session.behavioralSignals || [];
-            if (bsArr.length > 0) {
-              var bTypes = [];
-              bsArr.forEach(function (s) {
-                if (bTypes.indexOf(s.type) === -1) bTypes.push(s.type);
-              });
-              var bRows = bTypes
-                .map(function (t) {
-                  var cnt = bsArr.filter(function (s) {
-                    return s.type === t;
-                  }).length;
-                  var isCrit =
-                    [
-                      "screen_capture_detected",
-                      "iframe_detected",
-                      "ai_browser_blocked",
-                    ].indexOf(t) !== -1;
-                  var isWarn =
-                    [
-                      "ai_browser_detected",
-                      "ai_browser_warned",
-                      "focus_lost",
-                    ].indexOf(t) !== -1;
-                  var clr = isCrit ? "#ef4444" : isWarn ? "#eab308" : "#94a3b8";
-                  var lbl = t.replace(/_/g, " ");
-                  var dtl = "";
-                  for (var i = 0; i < bsArr.length; i++) {
-                    if (bsArr[i].type === t) {
-                      dtl = bsArr[i].detail || "";
-                      break;
-                    }
-                  }
-                  return (
-                    '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0;font-size:0.8rem;">' +
-                    '<span style="width:8px;height:8px;border-radius:50%;background:' +
-                    clr +
-                    ';flex-shrink:0;"></span>' +
-                    '<span style="color:#cbd5e1;font-weight:500;">' +
-                    lbl +
-                    (cnt > 1 ? " x" + cnt : "") +
-                    "</span>" +
-                    '<span style="color:#64748b;font-size:0.7rem;">' +
-                    dtl +
-                    "</span></div>"
-                  );
-                })
-                .join("");
-              signalsHtml =
-                '<div style="margin-top:1rem;">' +
-                '<div style="font-size:0.75rem;text-transform:uppercase;color:#64748b;font-weight:600;margin-bottom:0.5rem;">Behavioral Signals (' +
-                bsArr.length +
-                ")</div>" +
-                bRows +
-                "</div>";
-            }
-
-            var candidateHtml = candidateName
-              ? '<div class="detail-item"><div class="detail-item-label">Candidate</div><div class="detail-item-value">' +
-                candidateName +
-                "</div></div>"
+      tbody.innerHTML = sessions
+        .map(function (session) {
+          var startDate = new Date(session.startedAt);
+          var timeStr = startDate.toLocaleTimeString();
+          var isLockout = session.sessionType === "lockout";
+          var durationSec = isLockout
+            ? "Blocked"
+            : session.durationMs
+              ? Math.round(session.durationMs / 1000) + "s"
+              : "In progress";
+          var score =
+            session.integrityScore != null ? session.integrityScore : 0;
+          var scoreClass =
+            score >= 80 ? "green" : score >= 50 ? "yellow" : "red";
+          var verdict =
+            session.verdict || (isLockout ? "ai_blocked" : "clean");
+          var statusMap = {
+            clean: { cls: "clean", text: "Clean" },
+            inconclusive: { cls: "warning", text: "Inconclusive" },
+            suspicious: { cls: "warning", text: "Suspicious" },
+            ai_detected: { cls: "critical", text: "AI Detected" },
+            ai_blocked: { cls: "critical", text: "AI Blocked" },
+          };
+          var status = statusMap[verdict] || statusMap.clean;
+          var shortId = session.id
+            .replace("session_", "")
+            .replace("lockout_", "LK-")
+            .slice(0, 12);
+          var candidateName = session.candidateInfo
+            ? session.candidateInfo.firstName +
+            " " +
+            session.candidateInfo.lastName
+            : "";
+          var lockoutBrowser =
+            session.lockoutInfo && session.lockoutInfo.browserName
+              ? session.lockoutInfo.browserName
               : "";
 
-            // Proctoring snapshots
-            var snapshotsHtml = "";
-            var snapshots = session.proctorSnapshots || [];
-            if (snapshots.length > 0) {
-              var snapItems = snapshots
-                .map(function (snap) {
-                  var snapTime = new Date(
-                    snap.timestamp || snap.capturedAt,
-                  ).toLocaleTimeString();
-                  return (
-                    '<div style="display:inline-block;margin:0.25rem;text-align:center;">' +
-                    '<img src="' +
-                    snap.image +
-                    '" style="width:120px;height:90px;object-fit:cover;border-radius:4px;border:1px solid #334155;" />' +
-                    '<div style="font-size:0.65rem;color:#94a3b8;margin-top:2px;">' +
-                    (snap.reason || "").replace(/_/g, " ") +
-                    "</div>" +
-                    '<div style="font-size:0.6rem;color:#64748b;">' +
-                    snapTime +
-                    "</div>" +
-                    "</div>"
-                  );
-                })
-                .join("");
-              snapshotsHtml =
-                '<div style="margin-top:1rem;">' +
-                '<div style="font-size:0.75rem;text-transform:uppercase;color:#64748b;font-weight:600;margin-bottom:0.5rem;">Proctoring Snapshots (' +
-                snapshots.length +
-                ")</div>" +
-                '<div style="display:flex;flex-wrap:wrap;gap:0.25rem;">' +
-                snapItems +
-                "</div></div>";
-            }
-
-            return (
-              '<tr class="session-row" onclick="toggleDetail(\'' +
-              session.id +
-              "')\">" +
-              '<td><code style="color:#93c5fd;font-size:0.8rem;">' +
-              shortId +
-              "</code>" +
-              (candidateName
-                ? '<br><span style="font-size:0.7rem;color:#94a3b8;">' +
-                  candidateName +
+          var trapTags = "";
+          if (isLockout && lockoutBrowser) {
+            trapTags =
+              '<span class="trap-tag" style="background:#450a0a;color:#fca5a5;">' +
+              lockoutBrowser +
+              "</span>";
+          } else if (
+            session.trapsTriggered &&
+            session.trapsTriggered.length > 0
+          ) {
+            trapTags = session.trapsTriggered
+              .map(function (t) {
+                return (
+                  '<span class="trap-tag">' +
+                  t.trapType.replace(/_/g, " ") +
                   "</span>"
-                : "") +
-              "</td>" +
-              "<td>" +
-              timeStr +
-              "</td>" +
-              "<td>" +
-              durationSec +
-              "</td>" +
-              '<td><span style="font-weight:700;" class="' +
-              scoreClass +
-              '">' +
-              score +
-              "</span></td>" +
-              "<td>" +
-              trapTags +
-              "</td>" +
-              '<td><span class="badge badge-' +
-              status.cls +
-              '">' +
-              status.text +
-              "</span></td>" +
-              "</tr>" +
-              '<tr id="detail-' +
-              session.id +
-              '" style="display:none;">' +
-              '<td colspan="6" style="background:#0f172a;padding:1.25rem;">' +
-              '<div class="detail-grid">' +
-              candidateHtml +
-              '<div class="detail-item"><div class="detail-item-label">User Agent</div><div class="detail-item-value" style="font-size:0.7rem;word-break:break-all;">' +
-              (session.userAgent || "Unknown") +
-              "</div></div>" +
-              '<div class="detail-item"><div class="detail-item-label">Integrity Score</div><div class="detail-item-value" style="color:' +
-              (score >= 80 ? "#22c55e" : score >= 50 ? "#eab308" : "#ef4444") +
-              '">' +
-              score +
-              "/100</div></div>" +
-              "</div>" +
-              signalsHtml +
-              snapshotsHtml +
-              '<div class="answers-list" style="margin-top:1rem;"><div style="font-size:0.75rem;text-transform:uppercase;color:#64748b;font-weight:600;margin-bottom:0.5rem;">Answer Details</div>' +
-              answersHtml +
-              "</div>" +
-              "</td></tr>"
-            );
-          })
-          .join("");
-
-        // Re-open any rows that were expanded before this refresh
-        restoreExpandedRows();
-      }
-
-      // Track which detail rows are expanded so auto-refresh preserves them
-      var _expandedRows = {};
-
-      function toggleDetail(id) {
-        var row = document.getElementById("detail-" + id);
-        if (row) {
-          var isOpen = row.style.display !== "none";
-          row.style.display = isOpen ? "none" : "table-row";
-          if (isOpen) {
-            delete _expandedRows[id];
+                );
+              })
+              .join("");
           } else {
-            _expandedRows[id] = true;
+            trapTags = '<span style="color: #64748b;">None</span>';
           }
+
+          var answersHtml = "";
+          if (session.answers && session.answers.length > 0) {
+            answersHtml = session.answers
+              .map(function (a) {
+                var trapped = a.trapTriggered ? "🚨 TRAPPED" : "✓";
+                var trappedClass = a.trapTriggered
+                  ? "color:#ef4444;font-weight:600;"
+                  : "color:#22c55e;";
+                return (
+                  '<div class="answer-row">' +
+                  '<span class="answer-q">' +
+                  a.questionId.toUpperCase() +
+                  "</span>" +
+                  '<span class="answer-choice">Option ' +
+                  a.selectedOption +
+                  "</span>" +
+                  '<span class="answer-time">' +
+                  Math.round(a.responseTimeMs / 1000) +
+                  "s</span>" +
+                  '<span class="answer-status" style="' +
+                  trappedClass +
+                  '">' +
+                  trapped +
+                  (a.trapType
+                    ? " (" + a.trapType.replace(/_/g, " ") + ")"
+                    : "") +
+                  "</span>" +
+                  "</div>"
+                );
+              })
+              .join("");
+          } else if (isLockout) {
+            answersHtml =
+              '<p style="color:#64748b;">Session was blocked before assessment started.</p>';
+          } else {
+            answersHtml = '<p style="color:#64748b;">No answers recorded</p>';
+          }
+
+          var signalsHtml = "";
+          var bsArr = session.behavioralSignals || [];
+          if (bsArr.length > 0) {
+            var bTypes = [];
+            bsArr.forEach(function (s) {
+              if (bTypes.indexOf(s.type) === -1) bTypes.push(s.type);
+            });
+            var bRows = bTypes
+              .map(function (t) {
+                var cnt = bsArr.filter(function (s) {
+                  return s.type === t;
+                }).length;
+                var isCrit =
+                  [
+                    "screen_capture_detected",
+                    "iframe_detected",
+                    "ai_browser_blocked",
+                  ].indexOf(t) !== -1;
+                var isWarn =
+                  [
+                    "ai_browser_detected",
+                    "ai_browser_warned",
+                    "focus_lost",
+                  ].indexOf(t) !== -1;
+                var clr = isCrit ? "#ef4444" : isWarn ? "#eab308" : "#94a3b8";
+                var lbl = t.replace(/_/g, " ");
+                var dtl = "";
+                for (var i = 0; i < bsArr.length; i++) {
+                  if (bsArr[i].type === t) {
+                    dtl = bsArr[i].detail || "";
+                    break;
+                  }
+                }
+                return (
+                  '<div style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0;font-size:0.8rem;">' +
+                  '<span style="width:8px;height:8px;border-radius:50%;background:' +
+                  clr +
+                  ';flex-shrink:0;"></span>' +
+                  '<span style="color:#cbd5e1;font-weight:500;">' +
+                  lbl +
+                  (cnt > 1 ? " x" + cnt : "") +
+                  "</span>" +
+                  '<span style="color:#64748b;font-size:0.7rem;">' +
+                  dtl +
+                  "</span></div>"
+                );
+              })
+              .join("");
+            signalsHtml =
+              '<div style="margin-top:1rem;">' +
+              '<div style="font-size:0.75rem;text-transform:uppercase;color:#64748b;font-weight:600;margin-bottom:0.5rem;">Behavioral Signals (' +
+              bsArr.length +
+              ")</div>" +
+              bRows +
+              "</div>";
+          }
+
+          var candidateHtml = candidateName
+            ? '<div class="detail-item"><div class="detail-item-label">Candidate</div><div class="detail-item-value">' +
+            candidateName +
+            "</div></div>"
+            : "";
+
+          // Proctoring snapshots
+          var snapshotsHtml = "";
+          var snapshots = session.proctorSnapshots || [];
+          if (snapshots.length > 0) {
+            var snapItems = snapshots
+              .map(function (snap) {
+                var snapTime = new Date(
+                  snap.timestamp || snap.capturedAt,
+                ).toLocaleTimeString();
+                return (
+                  '<div style="display:inline-block;margin:0.25rem;text-align:center;">' +
+                  '<img src="' +
+                  snap.image +
+                  '" style="width:120px;height:90px;object-fit:cover;border-radius:4px;border:1px solid #334155;" />' +
+                  '<div style="font-size:0.65rem;color:#94a3b8;margin-top:2px;">' +
+                  (snap.reason || "").replace(/_/g, " ") +
+                  "</div>" +
+                  '<div style="font-size:0.6rem;color:#64748b;">' +
+                  snapTime +
+                  "</div>" +
+                  "</div>"
+                );
+              })
+              .join("");
+            snapshotsHtml =
+              '<div style="margin-top:1rem;">' +
+              '<div style="font-size:0.75rem;text-transform:uppercase;color:#64748b;font-weight:600;margin-bottom:0.5rem;">Proctoring Snapshots (' +
+              snapshots.length +
+              ")</div>" +
+              '<div style="display:flex;flex-wrap:wrap;gap:0.25rem;">' +
+              snapItems +
+              "</div></div>";
+          }
+
+          return (
+            '<tr class="session-row" onclick="toggleDetail(\'' +
+            session.id +
+            "')\">" +
+            '<td><code style="color:#93c5fd;font-size:0.8rem;">' +
+            shortId +
+            "</code>" +
+            (candidateName
+              ? '<br><span style="font-size:0.7rem;color:#94a3b8;">' +
+              candidateName +
+              "</span>"
+              : "") +
+            "</td>" +
+            "<td>" +
+            timeStr +
+            "</td>" +
+            "<td>" +
+            durationSec +
+            "</td>" +
+            '<td><span style="font-weight:700;" class="' +
+            scoreClass +
+            '">' +
+            score +
+            "</span></td>" +
+            "<td>" +
+            trapTags +
+            "</td>" +
+            '<td><span class="badge badge-' +
+            status.cls +
+            '">' +
+            status.text +
+            "</span></td>" +
+            "</tr>" +
+            '<tr id="detail-' +
+            session.id +
+            '" style="display:none;">' +
+            '<td colspan="6" style="background:#0f172a;padding:1.25rem;">' +
+            '<div class="detail-grid">' +
+            candidateHtml +
+            '<div class="detail-item"><div class="detail-item-label">User Agent</div><div class="detail-item-value" style="font-size:0.7rem;word-break:break-all;">' +
+            (session.userAgent || "Unknown") +
+            "</div></div>" +
+            '<div class="detail-item"><div class="detail-item-label">Integrity Score</div><div class="detail-item-value" style="color:' +
+            (score >= 80 ? "#22c55e" : score >= 50 ? "#eab308" : "#ef4444") +
+            '">' +
+            score +
+            "/100</div></div>" +
+            "</div>" +
+            signalsHtml +
+            snapshotsHtml +
+            '<div class="answers-list" style="margin-top:1rem;"><div style="font-size:0.75rem;text-transform:uppercase;color:#64748b;font-weight:600;margin-bottom:0.5rem;">Answer Details</div>' +
+            answersHtml +
+            "</div>" +
+            "</td></tr>"
+          );
+        })
+        .join("");
+
+      // Re-open any rows that were expanded before this refresh
+      restoreExpandedRows();
+    }
+
+    // Track which detail rows are expanded so auto-refresh preserves them
+    var _expandedRows = {};
+
+    function toggleDetail(id) {
+      var row = document.getElementById("detail-" + id);
+      if (row) {
+        var isOpen = row.style.display !== "none";
+        row.style.display = isOpen ? "none" : "table-row";
+        if (isOpen) {
+          delete _expandedRows[id];
+        } else {
+          _expandedRows[id] = true;
         }
       }
+    }
 
-      // After rendering, re-open any previously expanded rows
-      function restoreExpandedRows() {
-        Object.keys(_expandedRows).forEach(function (id) {
-          var row = document.getElementById("detail-" + id);
-          if (row) row.style.display = "table-row";
-        });
-      }
+    // After rendering, re-open any previously expanded rows
+    function restoreExpandedRows() {
+      Object.keys(_expandedRows).forEach(function (id) {
+        var row = document.getElementById("detail-" + id);
+        if (row) row.style.display = "table-row";
+      });
+    }
 
-      document
-        .getElementById("refresh-btn")
-        .addEventListener("click", loadDashboard);
-      loadDashboard();
-      setInterval(loadDashboard, 5000);
-    </script>
-  </body>
+    document
+      .getElementById("refresh-btn")
+      .addEventListener("click", loadDashboard);
+    loadDashboard();
+    setInterval(loadDashboard, 5000);
+  </script>
+</body>
+
 </html>

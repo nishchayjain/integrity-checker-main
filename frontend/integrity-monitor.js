@@ -14,7 +14,7 @@
 
   const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3847'
-    : 'https://integrity-shield-backend.onrender.com'; // Replace with Render URL
+    : 'https://integrity-checker-main.onrender.com';
   let _mutationObserver = null;
   let _focusLostCount = 0;
   const _seenSignals = new Set(); // deduplicate identical signals
@@ -268,7 +268,7 @@
               }
             });
           })
-          .catch(function () {});
+          .catch(function () { });
       } catch (e) {
         /* ignore */
       }
@@ -331,7 +331,7 @@
             },
           ],
         }),
-      }).catch(function () {});
+      }).catch(function () { });
     }
   }
 
@@ -362,7 +362,7 @@
             },
           ],
         }),
-      }).catch(function () {});
+      }).catch(function () { });
     }
   }
 
@@ -399,8 +399,8 @@
       addRecurringSignal(
         "clipboard_paste",
         "Paste event: " +
-          text.substring(0, 50) +
-          (text.length > 50 ? "..." : ""),
+        text.substring(0, 50) +
+        (text.length > 50 ? "..." : ""),
       );
     });
 
@@ -477,12 +477,12 @@
             addSignal(
               "ai_tool_injected",
               "AI tool element injected: <" +
-                tag +
-                ' id="' +
-                idStr +
-                '" class="' +
-                clsStr.substring(0, 40) +
-                '">',
+              tag +
+              ' id="' +
+              idStr +
+              '" class="' +
+              clsStr.substring(0, 40) +
+              '">',
             );
             // Trigger lockout for AI tool elements during assessment
             triggerExtensionLockout("AI tool element: " + idStr + " " + clsStr.substring(0, 40));
@@ -675,8 +675,8 @@
           addSignal(
             "mouse_exit_top",
             "Mouse exited viewport through top edge " +
-              topExitCount +
-              " times (overlay tool pattern)",
+            topExitCount +
+            " times (overlay tool pattern)",
           );
         }
       }
@@ -692,10 +692,10 @@
             addSignal(
               "overlay_interaction",
               "Rapid mouse exit/return detected (" +
-                rapidReturnCount +
-                " cycles, last gap " +
-                gap +
-                "ms) — consistent with desktop overlay tool",
+              rapidReturnCount +
+              " cycles, last gap " +
+              gap +
+              "ms) — consistent with desktop overlay tool",
             );
           }
         }
@@ -723,8 +723,8 @@
         addSignal(
           "top_zone_hover",
           "Spent " +
-            Math.round(topZoneAccum / 1000) +
-            "s near top of viewport — possible overlay tool interaction zone",
+          Math.round(topZoneAccum / 1000) +
+          "s near top of viewport — possible overlay tool interaction zone",
         );
         topZoneAccum = 0;
       }
@@ -755,7 +755,7 @@
             addSignal(
               "rapid_focus_cycle",
               rapidCycles +
-                " rapid blur/focus cycles (<4s each) — pattern matches desktop overlay tool interaction",
+              " rapid blur/focus cycles (<4s each) — pattern matches desktop overlay tool interaction",
             );
           }
         }
@@ -810,12 +810,12 @@
       addSignal(
         "timing_consistency",
         "Response timing unusually consistent (CV=" +
-          cv.toFixed(2) +
-          ", avg=" +
-          Math.round(avg) +
-          "ms across " +
-          times.length +
-          "q) — matches AI-assisted pattern",
+        cv.toFixed(2) +
+        ", avg=" +
+        Math.round(avg) +
+        "ms across " +
+        times.length +
+        "q) — matches AI-assisted pattern",
       );
     }
 
@@ -823,10 +823,10 @@
       addSignal(
         "speed_anomaly",
         "Avg response " +
-          Math.round(avg) +
-          "ms across " +
-          times.length +
-          " questions — faster than human reading+thinking baseline",
+        Math.round(avg) +
+        "ms across " +
+        times.length +
+        " questions — faster than human reading+thinking baseline",
       );
     }
 
@@ -840,8 +840,8 @@
       addSignal(
         "all_fast_answers",
         "All " +
-          times.length +
-          " answers under 5s — strong indicator of AI-assisted answering",
+        times.length +
+        " answers under 5s — strong indicator of AI-assisted answering",
       );
     }
   }
@@ -1055,16 +1055,16 @@
               addProctorEvent(
                 "gaze_offscreen",
                 "Eyes looking off-screen for " +
-                  Math.round(gazeDuration / 1000) +
-                  "s (gaze: " +
-                  Math.round(x) +
-                  "," +
-                  Math.round(y) +
-                  " viewport: " +
-                  vw +
-                  "x" +
-                  vh +
-                  ") — candidate may be reading from adjacent screen.",
+                Math.round(gazeDuration / 1000) +
+                "s (gaze: " +
+                Math.round(x) +
+                "," +
+                Math.round(y) +
+                " viewport: " +
+                vw +
+                "x" +
+                vh +
+                ") — candidate may be reading from adjacent screen.",
               );
             }
             updatePIPStatus("head_turn"); // Re-use look-away indicator
@@ -1092,7 +1092,7 @@
     if (_webgazerReady && typeof webgazer !== "undefined") {
       try {
         webgazer.end();
-      } catch (e) {}
+      } catch (e) { }
     }
   }
 
@@ -1111,7 +1111,7 @@
             "Multiple monitors detected (screen.isExtended) — candidate could display answers on second screen.",
         });
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // 2. getScreenDetails() is handled by the "Scan Displays" button in assessment.js
     //    (requires user gesture for the browser permission prompt)
@@ -1197,7 +1197,7 @@
         "colorDepth=" + window.screen.colorDepth,
         "platform=" + (navigator.platform || "unknown"),
       );
-    } catch (e) {}
+    } catch (e) { }
 
     // 4. Screen resolution heuristic: unusually wide viewport = extended desktop
     try {
@@ -1212,7 +1212,7 @@
             ") — may indicate extended/virtual desktop.",
         });
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // 5. Gamepad detection (someone could use a game controller to signal answers)
     try {
@@ -1228,7 +1228,7 @@
           });
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     _peripheralWarnings = warnings;
     return warnings;
@@ -1259,7 +1259,7 @@
           );
           captureViolationSnapshot("external_monitor");
         }
-      } catch (e) {}
+      } catch (e) { }
     }, 10000);
   }
 
@@ -1411,8 +1411,8 @@
           addProctorEvent(
             "camera_obstructed",
             "Camera appears covered or obstructed (avg brightness: " +
-              avgBrightness.toFixed(1) +
-              ") — possible phone placed over webcam.",
+            avgBrightness.toFixed(1) +
+            ") — possible phone placed over webcam.",
           );
           captureViolationSnapshot("camera_obstructed");
           updatePIPStatus("face_absent");
@@ -1425,8 +1425,8 @@
         addProctorEvent(
           "camera_unobstructed",
           "Camera obstruction cleared after " +
-            Math.round(obstructedMs / 1000) +
-            "s.",
+          Math.round(obstructedMs / 1000) +
+          "s.",
         );
         _cameraObstructed = false;
         _cameraObstructedSince = 0;
@@ -1448,8 +1448,8 @@
         notifyViolation(
           2,
           "Camera has been covered for " +
-            Math.round(obstructedDuration / 1000) +
-            "s. Assessment is paused.",
+          Math.round(obstructedDuration / 1000) +
+          "s. Assessment is paused.",
         );
         return;
       }
@@ -1480,8 +1480,8 @@
         notifyViolation(
           2,
           "Face not detected for " +
-            Math.round(absentDuration / 1000) +
-            "s. Assessment is paused until you return.",
+          Math.round(absentDuration / 1000) +
+          "s. Assessment is paused until you return.",
         );
         return;
       }
@@ -1514,8 +1514,8 @@
         notifyViolation(
           2,
           "You have been looking away for " +
-            Math.round(turnDuration / 1000) +
-            "s. Assessment is paused — please face the screen to continue.",
+          Math.round(turnDuration / 1000) +
+          "s. Assessment is paused — please face the screen to continue.",
         );
         return;
       }
@@ -1538,8 +1538,8 @@
         notifyViolation(
           2,
           "Your eyes have been looking away from the screen for " +
-            Math.round(gazeDuration / 1000) +
-            "s. Assessment is paused — please focus on your screen.",
+          Math.round(gazeDuration / 1000) +
+          "s. Assessment is paused — please focus on your screen.",
         );
         return;
       }
@@ -1646,10 +1646,10 @@
         addProctorEvent(
           "face_returned",
           "Face returned after " +
-            Math.round(absentMs / 1000) +
-            "s absence (total absent: " +
-            Math.round(_totalFaceAbsentMs / 1000) +
-            "s).",
+          Math.round(absentMs / 1000) +
+          "s absence (total absent: " +
+          Math.round(_totalFaceAbsentMs / 1000) +
+          "s).",
         );
       }
       updatePIPStatus("ok");
@@ -1736,21 +1736,21 @@
       if (turnDuration > 2000) {
         var turnDetail = isTurned
           ? "Head turned away " +
-            _headTurnCount +
-            " times (asymmetry: " +
-            asymmetryRatio.toFixed(2) +
-            ", jaw ratio: " +
-            jawShrinkRatio.toFixed(2) +
-            ")"
+          _headTurnCount +
+          " times (asymmetry: " +
+          asymmetryRatio.toFixed(2) +
+          ", jaw ratio: " +
+          jawShrinkRatio.toFixed(2) +
+          ")"
           : "Head looking down " +
-            _headTurnCount +
-            " times (nose drop: " +
-            noseDropRatio.toFixed(2) +
-            ")";
+          _headTurnCount +
+          " times (nose drop: " +
+          noseDropRatio.toFixed(2) +
+          ")";
         addProctorEvent(
           "head_turn",
           turnDetail +
-            " — candidate not looking at screen (possible phone, notes, or second device).",
+          " — candidate not looking at screen (possible phone, notes, or second device).",
         );
         if (_headTurnCount <= 5) {
           captureViolationSnapshot("head_turn");
@@ -1796,12 +1796,12 @@
         addProctorEvent(
           "face_absent",
           "Face not detected " +
-            _faceAbsentCount +
-            " times — " +
-            "currently absent for " +
-            Math.round(absentDuration / 1000) +
-            "s. " +
-            "Candidate may be looking at phone or external device.",
+          _faceAbsentCount +
+          " times — " +
+          "currently absent for " +
+          Math.round(absentDuration / 1000) +
+          "s. " +
+          "Candidate may be looking at phone or external device.",
         );
       }
 
@@ -1809,8 +1809,8 @@
         addProctorEvent(
           "extended_face_absent",
           "Face absent for total " +
-            Math.round((_totalFaceAbsentMs + absentDuration) / 1000) +
-            "s — strong indicator of external device cheating (phone, second screen).",
+          Math.round((_totalFaceAbsentMs + absentDuration) / 1000) +
+          "s — strong indicator of external device cheating (phone, second screen).",
         );
       }
     }
@@ -1828,10 +1828,10 @@
         addProctorEvent(
           "face_returned",
           "Face returned after " +
-            Math.round(absentMs / 1000) +
-            "s absence (total absent: " +
-            Math.round(_totalFaceAbsentMs / 1000) +
-            "s).",
+          Math.round(absentMs / 1000) +
+          "s absence (total absent: " +
+          Math.round(_totalFaceAbsentMs / 1000) +
+          "s).",
         );
       }
       updatePIPStatus("ok");
@@ -1862,9 +1862,9 @@
           addProctorEvent(
             "head_turn",
             "Head turned away " +
-              _headTurnCount +
-              " times — " +
-              "candidate not looking at screen (possible second device or person).",
+            _headTurnCount +
+            " times — " +
+            "candidate not looking at screen (possible second device or person).",
           );
           if (_headTurnCount <= 5) {
             captureViolationSnapshot("head_turn");
@@ -1906,7 +1906,7 @@
         addProctorEvent(
           "multiple_faces",
           count +
-            " faces detected — possible assistance from another person nearby.",
+          " faces detected — possible assistance from another person nearby.",
         );
         captureViolationSnapshot("multiple_faces");
       }
@@ -2082,24 +2082,24 @@
       addSignal(
         "proctor_summary",
         "Proctoring summary: face absent " +
-          _faceAbsentCount +
-          " times (" +
-          Math.round(_totalFaceAbsentMs / 1000) +
-          "s total), head turns " +
-          _headTurnCount +
-          " (" +
-          Math.round(_totalHeadTurnMs / 1000) +
-          "s), " +
-          "gaze off-screen " +
-          _gazeOffscreenCount +
-          " times (" +
-          Math.round(_totalGazeOffscreenMs / 1000) +
-          "s), " +
-          "multiple faces " +
-          _multipleFaceCount +
-          " times, " +
-          _snapshotQueue.length +
-          " violation snapshots captured.",
+        _faceAbsentCount +
+        " times (" +
+        Math.round(_totalFaceAbsentMs / 1000) +
+        "s total), head turns " +
+        _headTurnCount +
+        " (" +
+        Math.round(_totalHeadTurnMs / 1000) +
+        "s), " +
+        "gaze off-screen " +
+        _gazeOffscreenCount +
+        " times (" +
+        Math.round(_totalGazeOffscreenMs / 1000) +
+        "s), " +
+        "multiple faces " +
+        _multipleFaceCount +
+        " times, " +
+        _snapshotQueue.length +
+        " violation snapshots captured.",
       );
     }
   }
