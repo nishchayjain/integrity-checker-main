@@ -1596,6 +1596,25 @@
     }
   });
 
+  // Wake up backend and toggle loader visibility
+  (async () => {
+    const loaderTimeout = setTimeout(() => {
+      const loader = $("#backend-loader");
+      if (loader) loader.style.display = "flex";
+    }, 1000);
+
+    try {
+      // Hitting the base API endpoint (will wake Render instance)
+      await fetch(API_BASE_URL + "/api/health").catch(() => {});
+    } catch (e) {
+      // ignore
+    } finally {
+      clearTimeout(loaderTimeout);
+      const loader = $("#backend-loader");
+      if (loader) loader.style.display = "none";
+    }
+  })();
+
   // Render canvases on load
   initCanvases();
 })();

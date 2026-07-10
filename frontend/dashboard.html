@@ -249,6 +249,17 @@
 
 <body>
   <div class="dashboard">
+    <style>
+      @keyframes pulse {
+        0% { opacity: 0.3; }
+        50% { opacity: 1; }
+        100% { opacity: 0.3; }
+      }
+    </style>
+    <div id="backend-loader" style="display: none; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; color: #93c5fd; font-size: 0.9rem; align-items: center; gap: 0.75rem;">
+      <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; animation: pulse 1.5s infinite;"></span>
+      <span><strong>Server Wakeup:</strong> Waking up the free-tier backend services. This can take up to 60 seconds on the first visit.</span>
+    </div>
     <div class="dashboard-header">
       <div>
         <h1>Integrity Detection Dashboard</h1>
@@ -314,12 +325,25 @@
       : 'https://integrity-checker-main.onrender.com'; // Replace with Render URL
 
     async function loadDashboard() {
+      const loaderTimeout = setTimeout(() => {
+        const loader = document.getElementById("backend-loader");
+        if (loader) {
+          loader.style.display = "flex";
+        }
+      }, 1000);
+
       try {
         const res = await fetch(API_BASE_URL + "/api/dashboard");
         const data = await res.json();
         renderDashboard(data);
       } catch (err) {
         console.error("Failed to load dashboard:", err);
+      } finally {
+        clearTimeout(loaderTimeout);
+        const loader = document.getElementById("backend-loader");
+        if (loader) {
+          loader.style.display = "none";
+        }
       }
     }
 
